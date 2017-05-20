@@ -57,29 +57,38 @@ public class SantasBag {
 			}
 		}
 		
-		l = capacity - 1;
-		for (i = santasPackages.size() - 1; i > -1; i--) {
+		printTable(dinamicArray);
+		
+		j = dinamicArray[i].length - 1;
+		for (i = santasPackages.size() - 1; i > -1; i--) {			
+			if (dinamicArray[i][j] == dinamicArray[i - 1][j]) continue;
+			else if (i == santasPackages.size() - 1 && dinamicArray[i][j] != dinamicArray[i - 1][j]) {
+				for (k = dinamicArray[i][j]; k == dinamicArray[i][dinamicArray[i].length - 1]; j--, k = dinamicArray[i][j]);
+				j++;
+			}
+			
 			k = santasPackages.get(i).weight;
-			for (j = l; j > -1; j--, k--) {
-				if (i > 0) {
-					if (dinamicArray[i][j] == dinamicArray[i - 1][j] && k == santasPackages.get(i).weight)
-						break;
-					if (k == 0 && dinamicArray[i][j] == dinamicArray[i - 1][j]) {
-						santasPackages.get(i).used = true;
-						l = j;
-						break;
-					}
+			for (; j > -1; j--, k--) {
+				if (k == 0) {
+					santasPackages.get(i).used = true;
+					if (dinamicArray[i][j] == dinamicArray[i - 1][j]) continue;
 				}
-				else
-					if (k == 0 && dinamicArray[i][j] > 0) {
-						santasPackages.get(i).used = true;
-						break;
-					}
+				
 			}
 		}
 		
 		System.out.println(dinamicArray[santasPackages.size() - 1][capacity] + " brinquedos");
 		System.out.println("Peso: " + santasPackages.stream().filter(sp -> sp.used).mapToInt(sp -> sp.weight).sum() + " kg");
 		System.out.println("sobra(m) " + santasPackages.stream().filter(sp -> !sp.used).count() + " pacote(s)");
+	}
+
+	private static void printTable(int[][] dinamicArray) {
+		for (int i = 0; i < dinamicArray.length; i++) {
+			for (int j = 0; j < dinamicArray[i].length; j++) {
+				System.out.print(dinamicArray[i][j] + "\t");
+			}
+			System.out.println("");
+		}
+		
 	}
 }
