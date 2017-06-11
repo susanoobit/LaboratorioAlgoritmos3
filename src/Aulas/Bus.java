@@ -16,7 +16,7 @@ public class Bus {
 		public final static int busLength = 10, mBusLength = 5;
 		long totalLength, busColorQuantity, mBusColorQuantity;
 		
-		Problem (long totalLength, long busColorQuantity, long mBusColorQuantity) {
+		Problem (long totalLength, long mBusColorQuantity, long busColorQuantity) {
 			this.totalLength = totalLength;
 			this.busColorQuantity = busColorQuantity;
 			this.mBusColorQuantity = mBusColorQuantity;
@@ -30,11 +30,29 @@ public class Bus {
 	private static void solveProblem (Problem problem) {
 		long arrangementQuantity = 0;
 		long maxNumberOfBus = problem.totalLength / Problem.busLength;
+		long maxNumberOfMBus = problem.totalLength / Problem.mBusLength;
 		long maxNumberOfMBusAfterBus = problem.totalLength % Problem.busLength / Problem.mBusLength;
 		int relationBusMBus = Problem.busLength / Problem.mBusLength;
 		
 		for (long i = maxNumberOfBus, j = maxNumberOfMBusAfterBus; i > -1; i--, j += relationBusMBus) {
-			arrangementQuantity += fat(problem.busColorQuantity, i) * fat(problem.mBusColorQuantity, j) * (i != 0 && j != 0 ? fat(i + j) : 1);
+			long mBusColorPossibilities = fat(problem.mBusColorQuantity, j);
+			long busColorPossibilities = fat(problem.busColorQuantity, i);
+			long permutation = fat(i + j) / (fat(i) * fat(j)); // permutation with repetition
+			arrangementQuantity += busColorPossibilities * mBusColorPossibilities * permutation;
+		}
+		
+		// trying to consider not using all the space
+		for (long i = maxNumberOfBus - (maxNumberOfMBusAfterBus == 0 ? 1 : 0); i > 0; i--) {
+			long busColorPossibilities = fat(problem.busColorQuantity, i);
+			long freeSpace = maxNumberOfMBus - (i * relationBusMBus);
+			long permutation = fat(i + freeSpace) / (fat(i) * fat(freeSpace)); // permutation with repetition
+			arrangementQuantity += busColorPossibilities * permutation;
+		}
+		
+		for (long i = maxNumberOfMBus - 1; i > 0; i--) {
+			long mBusColorPossibilities = fat(problem.mBusColorQuantity, i);
+			long permutation = fat(maxNumberOfMBus) / (fat(i) * fat(maxNumberOfMBus - i)); // permutation with repetition
+			arrangementQuantity += mBusColorPossibilities * permutation;
 		}
 		
 		String print = String.valueOf(arrangementQuantity);
@@ -44,7 +62,7 @@ public class Bus {
 	}
 	
 	private static long fat (long n, long maxMultiplications) {
-		if (n < 2 || maxMultiplications == 0) return 1;
+		if (maxMultiplications == 0 || n < 2) return 1;
 		return n * fat(n - 1, maxMultiplications - 1);
 	}
 	
