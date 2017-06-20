@@ -34,32 +34,6 @@ public class tp2_lab3 {
 			best_loop = null;
 			
 			in.close();
-		}
-		
-		
-		
-		/*
-		Graph2.ClosedLoop[] best_loops = graph.PCV2(0);
-		long elapsedTime = System.currentTimeMillis() - start;
-		System.out.println("Os caminhos existentes no grafo são:");
-		for (int i = 0; i < graph.closed_loops.length; i++) {
-			System.out.print("\nLoop " + i);
-			graph.printClosedLoop(graph.closed_loops[i]);
-			System.out.print("\n");
-			
-		}
-		System.out.println("\n\n\n===========================================\n\n");
-		if (best_loops.length == 0) {
-			System.out.println("\nO menor caminho é:");
-			graph.printClosedLoop(best_loops[0]);
-		}
-		else {
-			System.out.println("\nOs " + best_loops.length + " menores caminhos são:");
-			for (int i = 0; i < best_loops.length; i++) {
-				graph.printClosedLoop(best_loops[i]);
-				System.out.print("\n");
-			}
-		}
-		*/	
+		}	
 	}	
 }
